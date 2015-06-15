@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: com.typesafe.akka:akka-parsing-experimental_2.11:1.0-M5">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.typesafe.akka/akka-parsing-experimental_2.11/1.0-M5/ad2e03918b934ab1efb96753cfbc268495963681/akka-parsing-experimental_2.11-1.0-M5.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.typesafe.akka/akka-parsing-experimental_2.11/1.0-M5/725278133f83bc541a018df9efdf870954095ba9/akka-parsing-experimental_2.11-1.0-M5-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

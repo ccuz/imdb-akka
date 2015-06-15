@@ -1,0 +1,64 @@
+apply plugin : 'java'
+apply plugin : 'application'
+apply plugin : 'eclipse'
+apply plugin : 'idea'
+
+version = '1.0'
+targetCompatibility = 1.8
+sourceCompatibility = 1.8
+
+mainClassName = "com.jso.camp2015.imdb.MovieServerApp"
+
+repositories {
+    mavenCentral ()
+    maven {
+        url "http://repo.akka.io/snapshots/"
+    }
+}
+
+dependencies {
+    compile 'com.typesafe.akka:akka-actor_2.11:2.3.11'
+    compile 'com.typesafe.akka:akka-testkit_2.11:2.3.11'
+    compile 'com.typesafe.akka:akka-remote_2.11:2.3.11'
+    compile 'com.typesafe.akka:akka-cluster_2.11:2.3.11'
+    compile 'com.typesafe.akka:akka-camel_2.11:2.3.11'
+    compile 'org.apache.camel:camel-jetty:2.10.3'
+    compile 'com.typesafe.akka:akka-http-experimental_2.11:1.0-M5'
+    compile 'com.typesafe.akka:akka-http-core-experimental_2.11:1.0-M5'
+    compile 'com.typesafe.akka:akka-http-java-experimental_2.11:1.0-M5'
+    compile 'com.typesafe.akka:akka-http-spray-json-experimental_2.11:1.0-M5'
+    compile 'com.typesafe.akka:akka-http-xml-experimental_2.11:1.0-M5'
+    compile 'com.typesafe.akka:akka-http-java-jackson-experimental_2.11:1.0-M5'
+    compile 'com.typesafe.akka:akka-http-testkit-experimental_2.11:1.0-M5'
+    //compile 'com.typesafe.akka:akka-http-java-testkit-experimental_2.11:1.0-M5'
+    //compile "org.reactivemongo:reactivemongo_2.11:0.10.5.0.akka23"
+    compile "org.mongodb:mongodb-driver-async:3.0.2"
+    compile 'javax.json:javax.json-api:1.0'
+    compile 'org.glassfish:javax.json:1.0.4'
+
+    testCompile 'junit:junit:4.11'
+    testCompile 'com.jayway.restassured:rest-assured:2.4.1'
+    testCompile 'com.novocode:junit-interface:0.10'
+}
+
+// no custom config for eclipse is needed
+eclipse {
+}
+
+idea {
+    module {
+        sourceDirs += file('src/main/java')
+        testSourceDirs += file('src/test/java')
+    }
+}
+
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Implementation-Title': 'Gradle Jar File Example',
+                'Implementation-Version': version,
+                'Main-Class': mainClassName
+    }
+    baseName = project.name + '-all'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
