@@ -25,8 +25,6 @@ public class MovieRepositoryActor extends UntypedActor {
     LoggingAdapter loggingAdapter = Logging.getLogger(getContext().system(), this);
 
     public static final class ListAllMoviesCommand {
-        public ListAllMoviesCommand(){
-        }
     }
 
     public static final class MoviesDetailsCommand {

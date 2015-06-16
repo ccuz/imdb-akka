@@ -2,8 +2,6 @@ package com.jso.camp2015.imdb.rest;
 
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
-import akka.event.Logging;
-import akka.event.LoggingAdapter;
 import akka.http.marshallers.jackson.Jackson;
 import akka.http.model.japi.StatusCodes;
 import akka.http.server.japi.*;
@@ -14,6 +12,7 @@ import com.jso.camp2015.imdb.repository.MovieRepositoryActor;
 import scala.concurrent.Await;
 import scala.concurrent.Future;
 import scala.concurrent.duration.Duration;
+import scala.runtime.AbstractFunction1;
 
 import java.util.List;
 
@@ -36,6 +35,20 @@ public class MovieRestService {
         HttpService.bindRoute(hostname, portNumber, createRestServiceRoutes(), system);
     }
 
+    static class ResultHandler extends AbstractFunction1<Object, RouteResult> {
+        private final RequestContext context;
+
+        public ResultHandler(RequestContext context) {
+            this.context = context;
+        }
+
+        @Override
+        public RouteResult apply(Object v1) {
+            return context.completeAs(Jackson.json(), v1);
+        }
+
+    }
+
     private Route createRestServiceRoutes() {
         final Timeout timeout = new Timeout(Duration.create(5, "seconds"));
 
@@ -55,19 +68,12 @@ public class MovieRestService {
                 }
             }
         };
-
         Handler getMoviesWithIdHandler = new Handler() {
             @Override
-            public RouteResult handle(RequestContext ctx) {
+            public RouteResult handle(final RequestContext ctx) {
                 final String id = movieId.get(ctx);
                 Future<Object> future = Patterns.ask(controllerActor, new MovieRepositoryActor.MoviesDetailsCommand(id), timeout);
-                try {
-                    List<Movie> response = (List<Movie>) Await.result(future, timeout.duration());
-                    return ctx.completeAs(Jackson.json(), response);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    return ctx.completeWithStatus(StatusCodes.INTERNAL_SERVER_ERROR);
-                }
+                return ctx.completeWith(future.map(new ResultHandler(ctx), system.dispatcher()));
             }
         };
 
