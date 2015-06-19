@@ -21,6 +21,7 @@ package com.jso.camp2015.imdb.model;
  */
 public class Movie {
     private final String _id;
+    private String objectId;
     private String movieID;
     private String seriesID;
     private String seriesType;
@@ -30,6 +31,15 @@ public class Movie {
 
     public Movie(final String _id){
         this._id = _id;
+        this.objectId=_id;
+    }
+
+    public String getObjectId() {
+        return objectId;
+    }
+
+    public void setObjectId(String objectId) {
+        this.objectId = objectId;
     }
 
     public String id() {

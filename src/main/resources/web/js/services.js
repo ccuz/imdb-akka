@@ -13,5 +13,5 @@ movieApp
         return $http.get(urlBase+'/movie', {params: {movieId: firstval} });
     };
 
-    return CalculatorService;
+    return MovieService;
 }]);
