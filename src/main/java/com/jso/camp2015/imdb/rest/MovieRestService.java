@@ -57,11 +57,16 @@ public class MovieRestService {
         Handler getMoviesHandler = new Handler() {
             @Override
             public RouteResult handle(RequestContext ctx) {
-                Future<Object> future = Patterns.ask(controllerActor,
-                        new MovieRepositoryActor.ListAllMoviesCommand(), timeout);
                 try {
-                    List<Movie> response = (List<Movie>) Await.result(future, timeout.duration());
-                    return ctx.completeAs(Jackson.json(), response);
+                    Future<Object> future = Patterns.ask(controllerActor,
+                            new MovieRepositoryActor.ListAllMoviesCommand(), timeout);
+
+                    return ctx.completeWith(future.map(new AbstractFunction1<Object, RouteResult>() {
+                        @Override
+                        public RouteResult apply(Object result) {
+                            return ctx.completeAs(Jackson.json(), result);
+                        }
+                    }, system.dispatcher()));
                 } catch (Exception e) {
                     e.printStackTrace();
                     return ctx.completeWithStatus(StatusCodes.INTERNAL_SERVER_ERROR);

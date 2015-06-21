@@ -6,11 +6,11 @@
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.5/angular.min.js"></script>
 </head>
 <body ng-app="MovieApp">
-    <div ng-controller="MovieController" ng-init="listMovies()">
+    <div ng-controller="MovieController" ng-init="movies = listMovies()">
         <h1>Movies</h1>
         <ul>
             <li ng-repeat="x in movies">
-                {{ x }}
+               Movie: {{ x.movieID }}, Year: {{ x.releaseYear }}
             </li>
         </ul>
     </div>
