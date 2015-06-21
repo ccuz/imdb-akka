@@ -41,7 +41,7 @@ public class MovieRepositoryActor extends UntypedActor {
     private static final class MovieDocumentMapper implements Function<Document, Movie>{
         @Override
         public Movie apply(Document document) {
-            Movie movie = new Movie(document.getString("_id"));
+            Movie movie = new Movie(document.getObjectId("_id").toHexString());
             movie.setMovieID(document.getString("MovieID"));
             movie.setSeriesID(document.getString("SeriesID"));
             movie.setSeriesType(document.getString("SeriesType"));
